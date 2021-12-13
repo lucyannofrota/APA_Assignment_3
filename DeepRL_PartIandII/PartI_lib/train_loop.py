@@ -4,7 +4,7 @@ import copy
 import numpy as np
 
 
-def train_loop(policy_net, target_net, env, device, TotalEpisodes, FreezeCounter, SaveAtCounter, createMovie, MaxSteps, exploration_threshold, exploration_decay, exploration_threshold_min, buffer, trainModel):
+def train_loop(policy_net, target_net, env, device, TotalEpisodes, FreezeCounter, SaveAtCounter, createMovie, MaxSteps, exploration_threshold, exploration_decay, exploration_threshold_min, buffer, trainModel,file_path):
   loss_val,scores, episodes,events, avg_scores,avg_scores20,exploration = [],[],[],[],[],[],[]
 
   bestScore=-99999;
@@ -19,8 +19,9 @@ def train_loop(policy_net, target_net, env, device, TotalEpisodes, FreezeCounter
         target_net.load_state_dict(policy_net.state_dict())
 
       if f % SaveAtCounter == 0:
-        torch.save(policy_net.state_dict(), "Checkpoints/v2CartPole_"+str(f)+'_model.ckpt')
-        createMovie(policy_net,"v2CartPole_"+str(f))
+        if(f != 0):
+          createMovie(policy_net,file_path,"/Checkpoints/v2CartPole_"+str(f))
+          torch.save(policy_net.state_dict(), file_path+"/Checkpoints/v2CartPole_"+str(f)+'/model.ckpt')
 
       for F in range(MaxSteps):
           action = policy_net.getPolicy(state,exploration_threshold)
@@ -51,5 +52,6 @@ def train_loop(policy_net, target_net, env, device, TotalEpisodes, FreezeCounter
           fx=f;
           bestNet=copy.deepcopy(policy_net);
 
-  torch.save(bestNet.state_dict(), "BestCartPole"+str(fx)+'_'+str(bestScore)+'_model.ckpt')
+  torch.save(bestNet.state_dict(), file_path+"/BestCartPole"+str(fx)+'_'+str(bestScore)+'_model.ckpt')
+  createMovie(bestNet,file_path,'bestNet')
   return bestNet, episodes, scores, events, avg_scores, avg_scores20, exploration
