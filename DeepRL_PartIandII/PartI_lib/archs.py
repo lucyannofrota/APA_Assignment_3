@@ -4,7 +4,7 @@ import random
 
 class DQN(nn.Module):
 
-    def __init__(self, inputs, outputs,dfactor,device):
+    def __init__(self, inputs, outputs,dfactor,device,n_layers):
         super(DQN, self).__init__()
         
         self.input_size=inputs;
@@ -12,14 +12,44 @@ class DQN(nn.Module):
         self.discount_factor=dfactor;
         self.device=device
         
-        self.layers = nn.Sequential(
-            nn.Linear(in_features=self.input_size, out_features=128),
-            # nn.Linear(in_features=128, out_features=256),
-            # nn.Linear(in_features=256, out_features=512),
-            # nn.Linear(in_features=512, out_features=256),
-            nn.Linear(in_features=128, out_features=self.output_size)
-        )
-
+        if(n_layers == 1):
+            self.layers = nn.Sequential(
+                nn.Linear(in_features=self.input_size, out_features=512),
+                nn.ReLU(),
+                nn.Linear(in_features=512, out_features=256),
+                nn.ReLU(),
+                nn.Linear(in_features=256, out_features=self.output_size)
+            )
+        elif(n_layers == 3):
+            self.layers = nn.Sequential(
+                nn.Linear(in_features=self.input_size, out_features=512),
+                nn.ReLU(),
+                nn.Linear(in_features=512, out_features=256),
+                nn.ReLU(),
+                nn.Linear(in_features=256, out_features=128),
+                nn.ReLU(),
+                nn.Linear(in_features=128, out_features=64),
+                nn.ReLU(),
+                nn.Linear(in_features=64, out_features=self.output_size)
+            )
+        elif(n_layers == 5):
+            self.layers = nn.Sequential(
+                nn.Linear(in_features=self.input_size, out_features=512),
+                nn.ReLU(),
+                nn.Linear(in_features=512, out_features=256),
+                nn.ReLU(),
+                nn.Linear(in_features=256, out_features=128),
+                nn.ReLU(),
+                nn.Linear(in_features=128, out_features=64),
+                nn.ReLU(),
+                nn.Linear(in_features=64, out_features=32),
+                nn.ReLU(),
+                nn.Linear(in_features=32, out_features=16),
+                nn.ReLU(),
+                nn.Linear(in_features=16, out_features=self.output_size)
+            )
+        else:
+            raise Exception("Invalid number of layers [1,3,5]")
 
     # Called with either one element to determine next action, or a batch
     # during optimization. Returns tensor([[left0exp,right0exp]...]).
@@ -44,7 +74,7 @@ class DQN(nn.Module):
  
 
 
-def archs(arch_name,inputs,n_actions,discount_factor,device):
-    policy_net = DQN(inputs, n_actions,discount_factor,device).to(device)
-    target_net = DQN(inputs, n_actions,discount_factor,device).to(device)
+def archs(arch_name,inputs,n_actions,discount_factor,device,n_layers):
+    policy_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
+    target_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
     return policy_net, target_net

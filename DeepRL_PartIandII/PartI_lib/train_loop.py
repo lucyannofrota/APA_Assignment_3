@@ -51,7 +51,7 @@ def train_loop(policy_net, target_net, env, device, TotalEpisodes, FreezeCounter
           bestScore=score;
           fx=f;
           bestNet=copy.deepcopy(policy_net);
-
+      if(avg_scores20[-1] >= 195):
+        break
   torch.save(bestNet.state_dict(), file_path+"/BestCartPole"+str(fx)+'_'+str(bestScore)+'_model.ckpt')
-  createMovie(bestNet,file_path,'bestNet')
   return bestNet, episodes, scores, events, avg_scores, avg_scores20, exploration

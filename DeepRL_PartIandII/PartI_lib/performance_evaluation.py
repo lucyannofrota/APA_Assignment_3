@@ -3,7 +3,7 @@ from matplotlib.pyplot import figure
 
 import json
 
-def performance_evaluation(episodes, scores, events, avg_scores, avg_scores20, exploration):
+def performance_evaluation(file_path,episodes, scores, events, avg_scores, avg_scores20, exploration):
     figure(figsize=(12, 6), dpi=80)
     plt.plot(episodes, scores)
     plt.plot(episodes, events)
@@ -14,13 +14,18 @@ def performance_evaluation(episodes, scores, events, avg_scores, avg_scores20, e
     plt.ylabel('y axis label')
     plt.title('Report')
     plt.legend(['scores',  'events', 'avg_scores', 'avg_scores20','exploration'])
+    plt.savefig(file_path+"/graph.png")
+    plt.savefig(file_path+"/graph.pdf")
     plt.show()
 
 def report(file_path,arch,BatchSize,exploration_threshold,exploration_threshold_min,exploration_decay,discount_factor,
-            LearningRate,LearningRateDecay,episodes, scores, events, avg_scores, avg_scores20, exploration):
+            LearningRate,LearningRateDecay,episodes, scores, events, avg_scores, avg_scores20, exploration,n_layers):
 
     mod = {}
     mod['arch'] = arch
+    mod['n_layers'] = n_layers
+    mod['episodes_trained'] = len(scores)
+    mod['last_avg_score'] = avg_scores[-1]
     mod['batch_size'] = BatchSize
     mod['exploration_threshold'] = exploration_threshold
     mod['exploration_threshold_min'] = exploration_threshold_min
