@@ -85,49 +85,36 @@ class DDQN(nn.Module):
         self.discount_factor=dfactor;
         self.device=device
         
-        if(n_layers == 1):
-            self.layers = nn.Sequential(
-                nn.Linear(in_features=self.input_size, out_features=512),
-                nn.ReLU(),
-                nn.Linear(in_features=512, out_features=256),
-                nn.ReLU(),
-                nn.Linear(in_features=256, out_features=self.output_size)
-            )
-        elif(n_layers == 3):
-            self.layers = nn.Sequential(
-                nn.Linear(in_features=self.input_size, out_features=512),
-                nn.ReLU(),
-                nn.Linear(in_features=512, out_features=256),
-                nn.ReLU(),
-                nn.Linear(in_features=256, out_features=128),
-                nn.ReLU(),
-                nn.Linear(in_features=128, out_features=64),
-                nn.ReLU(),
-                nn.Linear(in_features=64, out_features=self.output_size)
-            )
-        elif(n_layers == 5):
-            self.layers = nn.Sequential(
-                nn.Linear(in_features=self.input_size, out_features=512),
-                nn.ReLU(),
-                nn.Linear(in_features=512, out_features=256),
-                nn.ReLU(),
-                nn.Linear(in_features=256, out_features=128),
-                nn.ReLU(),
-                nn.Linear(in_features=128, out_features=64),
-                nn.ReLU(),
-                nn.Linear(in_features=64, out_features=32),
-                nn.ReLU(),
-                nn.Linear(in_features=32, out_features=16),
-                nn.ReLU(),
-                nn.Linear(in_features=16, out_features=self.output_size)
-            )
-        else:
-            raise Exception("Invalid number of layers [1,3,5]")
+        self.features = nn.Sequential(
+            nn.Linear(self.input_size, 256),
+            nn.ReLU(),
+            # nn.Linear(in_features=512, out_features=256),
+            # nn.ReLU(),
+            nn.Linear(in_features=256, out_features=128),
+            nn.ReLU()
+        )
+        
+        self.advantage = nn.Sequential(
+            nn.Linear(in_features=128, out_features=128),
+            nn.ReLU(),
+            nn.Linear(in_features=128, out_features=self.output_size),
+        )
 
+        self.value = nn.Sequential(
+            nn.Linear(in_features=128, out_features=128),
+            nn.ReLU(),
+            nn.Linear(in_features=128, out_features=1),
+        )
+        
     # Called with either one element to determine next action, or a batch
     # during optimization. Returns tensor([[left0exp,right0exp]...]).
     def forward(self, x):
-        return self.layers(x)
+        x=self.features(x)
+        # x = x.view(x.size(0), -1)
+        # x = self.features(x)
+        advantage = self.advantage(x)
+        value     = self.value(x)
+        return value + advantage  - advantage.mean()
 
     def policy(self,state):
        with torch.no_grad():
@@ -147,6 +134,10 @@ class DDQN(nn.Module):
 
 
 def archs(arch_name,inputs,n_actions,discount_factor,device,n_layers):
-    policy_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
-    target_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
+    if(arch_name == "DQN"):
+        policy_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
+        target_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
+    else:
+        policy_net = DDQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
+        target_net = DDQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
     return policy_net, target_net
