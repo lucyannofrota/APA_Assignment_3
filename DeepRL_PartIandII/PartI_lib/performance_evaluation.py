@@ -3,13 +3,14 @@ from matplotlib.pyplot import figure
 
 import json
 
-def performance_evaluation(file_path,episodes, scores, events, avg_scores, avg_scores20, exploration):
+def performance_evaluation(file_path,episodes, scores, events, avg_scores, avg_scores20, exploration,avg_scores100):
     figure(figsize=(12, 6), dpi=80)
     plt.plot(episodes, scores)
     plt.plot(episodes, events)
     plt.plot(episodes, avg_scores)
     plt.plot(episodes, avg_scores20)
     plt.plot(episodes, exploration)
+    plt.plot(episodes, avg_scores100)
     plt.xlabel('episodes')
     plt.ylabel('y axis label')
     plt.title('Report')
@@ -19,7 +20,7 @@ def performance_evaluation(file_path,episodes, scores, events, avg_scores, avg_s
     plt.show()
 
 def report(file_path,arch,BatchSize,exploration_threshold,exploration_threshold_min,exploration_decay,discount_factor,
-            LearningRate,LearningRateDecay,episodes, scores, events, avg_scores, avg_scores20, exploration,n_layers):
+            LearningRate,LearningRateDecay,episodes, scores, events, avg_scores, avg_scores20, exploration,n_layers,avg_scores100):
 
     mod = {}
     mod['arch'] = arch
@@ -39,6 +40,7 @@ def report(file_path,arch,BatchSize,exploration_threshold,exploration_threshold_
     mod['avg_scores'] = avg_scores
     mod['avg_scores20'] = avg_scores20
     mod['exploration'] = exploration
+    mod['avg_scores100'] = avg_scores100
 
     filePath = file_path+'/data.json'
 
