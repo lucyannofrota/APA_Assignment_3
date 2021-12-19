@@ -14,7 +14,7 @@ def performance_evaluation(file_path,episodes, scores, events, avg_scores, avg_s
     plt.xlabel('episodes')
     plt.ylabel('y axis label')
     plt.title('Report')
-    plt.legend(['scores',  'events', 'avg_scores', 'avg_scores20','exploration'])
+    plt.legend(['scores',  'events', 'avg_scores', 'avg_scores20','exploration','avg_scores100'])
     plt.savefig(file_path+"/graph.png")
     plt.savefig(file_path+"/graph.pdf")
     plt.show()

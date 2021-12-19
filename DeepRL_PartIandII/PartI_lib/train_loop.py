@@ -45,9 +45,10 @@ def train_loop(policy_net, target_net, env, device, TotalEpisodes, FreezeCounter
       events.append(F)
       avg_scores.append(score/F)
       avg_scores20.append(np.mean(scores[-20:]))
+      avg_scores100.append(np.mean(scores[-100:]))
 
       if(score>=bestScore):
-          print(score,F+1,np.mean(scores[-20:]))
+          print(score,F+1,np.mean(scores[-20:]),np.mean(scores[-100:]))
           bestScore=score;
           fx=f;
           bestNet=copy.deepcopy(policy_net);

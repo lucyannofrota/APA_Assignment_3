@@ -75,15 +75,15 @@ class DQN(nn.Module):
         else:
             return  torch.tensor([[random.randrange(self.output_size)]], device=self.device, dtype=torch.long)
 
-# class DDQN(nn.Module):
+class DuelingDQN(nn.Module):
 
-#     def __init__(self, inputs, outputs,dfactor,device,n_layers):
-#         super(DDQN, self).__init__()
+    def __init__(self, inputs, outputs,dfactor,device,n_layers):
+        super(DuelingDQN, self).__init__()
         
-#         self.input_size=inputs;
-#         self.output_size=outputs;
-#         self.discount_factor=dfactor;
-#         self.device=device
+        self.input_size=inputs;
+        self.output_size=outputs;
+        self.discount_factor=dfactor;
+        self.device=device
         
         self.features = nn.Sequential(
             nn.Linear(self.input_size, 256),
@@ -116,18 +116,18 @@ class DQN(nn.Module):
         value     = self.value(x)
         return value + advantage  - advantage.mean()
 
-#     def policy(self,state):
-#        with torch.no_grad():
-#             return self.__call__(state).argmax()
+    def policy(self,state):
+       with torch.no_grad():
+            return self.__call__(state).argmax()
      
-#     def getPolicy(self,state,eps_threshold):
-#         sample = random.random()
-#         if sample > eps_threshold:
-#             with torch.no_grad():
+    def getPolicy(self,state,eps_threshold):
+        sample = random.random()
+        if sample > eps_threshold:
+            with torch.no_grad():
  
-#                 return self.__call__(state).argmax()
-#         else:
-#             return  torch.tensor([[random.randrange(self.output_size)]], device=self.device, dtype=torch.long)
+                return self.__call__(state).argmax()
+        else:
+            return  torch.tensor([[random.randrange(self.output_size)]], device=self.device, dtype=torch.long)
 
 
  
@@ -138,6 +138,6 @@ def archs(arch_name,inputs,n_actions,discount_factor,device,n_layers):
         policy_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
         target_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
     else:
-        policy_net = DDQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
-        target_net = DDQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
+        policy_net = DuelingDQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
+        target_net = DuelingDQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
     return policy_net, target_net
