@@ -14,48 +14,48 @@ class DQN(nn.Module):
         
         if(n_layers == 0):
             self.layers = nn.Sequential(
-                nn.Linear(in_features=self.input_size, out_features=512),
+                nn.Linear(in_features=self.input_size, out_features=256),
                 nn.ReLU(),
-                nn.Linear(in_features=512, out_features=self.output_size)
+                nn.Linear(in_features=256, out_features=self.output_size)
             )
         elif(n_layers == 1):
             self.layers = nn.Sequential(
-                nn.Linear(in_features=self.input_size, out_features=512),
+                nn.Linear(in_features=self.input_size, out_features=128),
                 nn.ReLU(),
-                nn.Linear(in_features=512, out_features=256),
+                nn.Linear(in_features=128, out_features=256),
                 nn.ReLU(),
                 nn.Linear(in_features=256, out_features=self.output_size)
             )
         elif(n_layers == 3):
             self.layers = nn.Sequential(
-                nn.Linear(in_features=self.input_size, out_features=512),
+                nn.Linear(in_features=self.input_size, out_features=32),
                 nn.ReLU(),
-                nn.Linear(in_features=512, out_features=256),
+                nn.Linear(in_features=32, out_features=64),
                 nn.ReLU(),
-                nn.Linear(in_features=256, out_features=128),
+                nn.Linear(in_features=64, out_features=128),
                 nn.ReLU(),
-                nn.Linear(in_features=128, out_features=64),
+                nn.Linear(in_features=128, out_features=256),
                 nn.ReLU(),
-                nn.Linear(in_features=64, out_features=self.output_size)
+                nn.Linear(in_features=256, out_features=self.output_size)
             )
         elif(n_layers == 5):
             self.layers = nn.Sequential(
-                nn.Linear(in_features=self.input_size, out_features=512),
+                nn.Linear(in_features=self.input_size, out_features=8),
                 nn.ReLU(),
-                nn.Linear(in_features=512, out_features=256),
+                nn.Linear(in_features=8, out_features=16),
                 nn.ReLU(),
-                nn.Linear(in_features=256, out_features=128),
+                nn.Linear(in_features=16, out_features=32),
                 nn.ReLU(),
-                nn.Linear(in_features=128, out_features=64),
+                nn.Linear(in_features=32, out_features=64),
                 nn.ReLU(),
-                nn.Linear(in_features=64, out_features=32),
+                nn.Linear(in_features=64, out_features=128),
                 nn.ReLU(),
-                nn.Linear(in_features=32, out_features=16),
+                nn.Linear(in_features=128, out_features=256),
                 nn.ReLU(),
-                nn.Linear(in_features=16, out_features=self.output_size)
+                nn.Linear(in_features=256, out_features=self.output_size)
             )
         else:
-            raise Exception("Invalid number of layers [1,3,5]")
+            raise Exception("Invalid number of layers [0,1,3,5]")
 
     # Called with either one element to determine next action, or a batch
     # during optimization. Returns tensor([[left0exp,right0exp]...]).
