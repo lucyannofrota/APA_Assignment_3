@@ -134,10 +134,10 @@ class DuelingDQN(nn.Module):
 
 
 def archs(arch_name,inputs,n_actions,discount_factor,device,n_layers):
-    if(arch_name == "DQN"):
+    if((arch_name == "DQN") or (arch_name == "DoubleDQN")):
         policy_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
         target_net = DQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
-    else:
+    elif(arch_name == "DuelingDQN" or arch_name == "DoubleDuelingDQN"):
         policy_net = DuelingDQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
         target_net = DuelingDQN(inputs, n_actions,discount_factor,device,n_layers).to(device)
     return policy_net, target_net

@@ -46,7 +46,7 @@ def create_dir(path,name,overwrite = False):
     return path+'/'+name
 
 def set_name(arch,n_layers,BatchSize,exploration_threshold,exploration_threshold_min,exploration_decay,discount_factor,LearningRate,LearningRateDecay):
-    if len(n_layers) > 0:
+    if n_layers > 0:
         new_name = arch+"_" + str(n_layers) + "_" + str(BatchSize) + "_" + str(exploration_threshold).replace('.', '') + "_" + \
                 str(exploration_threshold_min).replace('.', '') + "_" + \
                 ("{:.0e}".format(exploration_decay)).replace(
