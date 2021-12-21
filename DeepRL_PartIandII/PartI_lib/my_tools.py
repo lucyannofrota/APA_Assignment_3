@@ -45,12 +45,19 @@ def create_dir(path,name,overwrite = False):
         os.mkdir(path+"/"+name)
     return path+'/'+name
 
-def set_name(arch,BatchSize,exploration_threshold,exploration_threshold_min,exploration_decay,discount_factor,LearningRate,LearningRateDecay):
-    new_name = arch+"_" + str(BatchSize) + "_" + str(exploration_threshold).replace('.', '') + "_" + \
+def set_name(arch,n_layers,BatchSize,exploration_threshold,exploration_threshold_min,exploration_decay,discount_factor,LearningRate,LearningRateDecay):
+    if len(n_layers) > 0:
+        new_name = arch+"_" + str(n_layers) + "_" + str(BatchSize) + "_" + str(exploration_threshold).replace('.', '') + "_" + \
+                str(exploration_threshold_min).replace('.', '') + "_" + \
+                ("{:.0e}".format(exploration_decay)).replace(
+                    '.', '')+"_"+str(discount_factor).replace('.', '')+"_"+("{:.0e}".format(LearningRate)).replace(
+                    '.', '')+"_"+str(LearningRateDecay).replace('.', '')
+    else:
+        new_name = arch + "_" + str(BatchSize) + "_" + str(exploration_threshold).replace('.', '') + "_" + \
             str(exploration_threshold_min).replace('.', '') + "_" + \
             ("{:.0e}".format(exploration_decay)).replace(
-                '.', '')+"_"+str(discount_factor).replace('.', '')+"_"+("{:.0e}".format(LearningRate)).replace(
-                '.', '')+"_"+str(LearningRateDecay).replace('.', '')
+            '.', '')+"_"+str(discount_factor).replace('.', '')+"_"+("{:.0e}".format(LearningRate)).replace(
+            '.', '')+"_"+str(LearningRateDecay).replace('.', '')
     return new_name
 
 # def get_reference(pathName):

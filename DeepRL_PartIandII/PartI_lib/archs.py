@@ -12,13 +12,13 @@ class DQN(nn.Module):
         self.discount_factor=dfactor;
         self.device=device
         
-        if(n_layers == 0):
+        if(n_layers == 1):
             self.layers = nn.Sequential(
                 nn.Linear(in_features=self.input_size, out_features=256),
                 nn.ReLU(),
                 nn.Linear(in_features=256, out_features=self.output_size)
             )
-        elif(n_layers == 1):
+        elif(n_layers == 2):
             self.layers = nn.Sequential(
                 nn.Linear(in_features=self.input_size, out_features=128),
                 nn.ReLU(),
@@ -26,7 +26,7 @@ class DQN(nn.Module):
                 nn.ReLU(),
                 nn.Linear(in_features=256, out_features=self.output_size)
             )
-        elif(n_layers == 3):
+        elif(n_layers == 4):
             self.layers = nn.Sequential(
                 nn.Linear(in_features=self.input_size, out_features=32),
                 nn.ReLU(),
@@ -38,7 +38,7 @@ class DQN(nn.Module):
                 nn.ReLU(),
                 nn.Linear(in_features=256, out_features=self.output_size)
             )
-        elif(n_layers == 5):
+        elif(n_layers == 6):
             self.layers = nn.Sequential(
                 nn.Linear(in_features=self.input_size, out_features=8),
                 nn.ReLU(),
